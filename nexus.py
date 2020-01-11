@@ -4,10 +4,11 @@ Created on Fri Jan  3 12:56:28 2020
 
 @author: Kamaljeet
 """
+
 import numpy as np
 import cv2
 
-cap = cv2.VideoCapture(1)
+cap = cv2.VideoCapture("C:\\Users\\Kamaljeet\\Desktop\\Raj\\Nexus\\WIN_20200109_19_04_45_Pro.mp4")
 
 a,b = 320,480
 
@@ -20,8 +21,8 @@ while(True):
     
     blurred = cv2.GaussianBlur(gray, (5, 5), 0)
     
-    #edged = cv2.Canny(gray, 30, 200)
-    contours, hierarchy = cv2.findContours(blurred, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_NONE)
+    edged = cv2.Canny(blurred, 30, 200)
+    contours, hierarchy = cv2.findContours(edged, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_NONE)
     #cv2.drawContours(frame, contours, -1, (0, 255, 0), 3)
 
     cY_dict = {}
@@ -54,7 +55,7 @@ while(True):
 
     # Display the resulting frame
     cv2.imshow('frame',frame)
-    if cv2.waitKey(1) & 0xFF == ord('q'):
+    if cv2.waitKey(60) & 0xFF == ord('q'):
         break
 
 # When everything done, release the capture
