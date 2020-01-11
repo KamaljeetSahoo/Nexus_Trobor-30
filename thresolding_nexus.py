@@ -14,7 +14,7 @@ a,b = 320,480
 def nothing(val):
     pass
 
-cap = cv2.VideoCapture("C:\\Users\\Kamaljeet\\Desktop\\Raj\\Nexus\\WIN_20200109_19_04_45_Pro.mp4")
+cap = cv2.VideoCapture("C:\\Users\\Kamaljeet\\Desktop\\Nexus\\WIN_20200109_19_04_45_Pro.mp4")
 
 
 cv2.namedWindow('color')
