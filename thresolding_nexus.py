@@ -9,21 +9,28 @@ import cv2
 import matplotlib.pyplot as plt
 import numpy as np
 import imutils
+import math
+import serial
+import time
 a,b = 320,480
 
 def nothing(val):
     pass
 
-cap = cv2.VideoCapture("C:\\Users\\Kamaljeet\\Desktop\\Nexus\\WIN_20200109_19_04_45_Pro.mp4")
+ser = serial.Serial('COM7',9600, timeout=1)
+
+
+cap = cv2.VideoCapture(1)
+#cap = cv2.VideoCapture(1)
 
 
 cv2.namedWindow('color')
 cv2.createTrackbar('h','color',36,255,nothing)
-cv2.createTrackbar('s','color',165,255,nothing)
-cv2.createTrackbar('v','color',25,255,nothing)
-cv2.createTrackbar('H','color',70,255 ,nothing)
-cv2.createTrackbar('S','color',255,255,nothing)
-cv2.createTrackbar('V','color',255,255,nothing)
+cv2.createTrackbar('s','color',174,255,nothing)
+cv2.createTrackbar('v','color',32,255,nothing)
+cv2.createTrackbar('H','color',76,255 ,nothing)
+cv2.createTrackbar('S','color',212,255,nothing)
+cv2.createTrackbar('V','color',196,255,nothing)
 
 kernel = np.ones((10,10), np.uint8)
 
@@ -77,7 +84,7 @@ while(True):
             cv2.drawContours(img2, [c], -1, (0, 255, 0), 2)
             cv2.circle(img2, (cx, cy), 7, (255, 255, 255), -1)
             cv2.circle(img2, (a,b), 5, (255, 0 ,0), -1)
-            cv2.line(img2, (a,b), (cx, cy), (0,0,255), 4)
+            #cv2.line(img2, (a,b), (cx, cy), (0,0,255), 4)
             cv2.line(img2, (a,b), (320, 0), (0,255,0), 4)
             
         cY_dict[cx]=cy
@@ -86,8 +93,38 @@ while(True):
         
         #maxcY=max(cY_list)
         cv2.line(img2, (a,b), (maxcX, maxcY), (0,255,255), 4)
-    cv2.imshow("color",np.hstack([color,img2]))
-    #c=c+1
+        
+        tanA=(maxcX-a)/(maxcY-b)
+        tanB=(320-a)/(0-b)
+        TAN=(tanA-tanB)/(1+(tanA*tanB))
+        angle=-(((math.atan(TAN))*180)/3.14)
+        print("angle",angle)
+        
+        if(int(angle) in range(-5,5)):
+            ser.write(b'F')
+            print("forward")
+        elif(int(angle) in range(-45,-5)):
+            ser.write(b'A')
+            print("forward_left")
+        elif(int(angle) in range(-90,-45)):
+            ser.write(b'L')
+            print("left")
+        elif(int(angle) in range(5,45)):
+            ser.write(b'B')
+            print("forward_right" )
+        elif(int(angle) in range(45,90)):
+            ser.write(b'R')
+            print("right")
+        else:
+            ser.write(b'S')
+            print("stop")
+            
+        
+            
+            
+    #cv2.imshow("color",np.hstack([color,img2]))
+    cv2.imshow("color",img2)
+    #c
     #cv2.imshow("color",img)
     if cv2.waitKey(24)==27:
         break

@@ -8,7 +8,7 @@ Created on Fri Jan  3 12:56:28 2020
 import numpy as np
 import cv2
 
-cap = cv2.VideoCapture("C:\\Users\\Kamaljeet\\Desktop\\Nexus\\WIN_20200109_19_04_45_Pro.mp4")
+cap = cv2.VideoCapture(1)
 
 a,b = 320,480
 
